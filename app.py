@@ -7,8 +7,12 @@ import numpy as np
 
 def get_frame_at_time(video, time):
     """Extracts a frame from the video at the specified time."""
-    frame = video.get_frame(time)
-    return Image.fromarray(frame)
+    try:
+        frame = video.get_frame(time)
+        return Image.fromarray(frame)
+    except Exception as e:
+        st.error(f"Error extracting frame at {time} seconds: {e}")
+        return None
 
 def main():
     st.title("Video Timing Web Application")
@@ -36,12 +40,14 @@ def main():
         # Select start and end points with frame preview
         start_time = st.slider("Select start time", 0.0, duration, 0.0, 0.01)
         start_frame = get_frame_at_time(video, start_time)
-        st.image(start_frame, caption=f"Start Frame at {start_time:.2f} seconds", use_column_width=True)
+        if start_frame:
+            st.image(start_frame, caption=f"Start Frame at {start_time:.2f} seconds", use_column_width=True)
         st.text(f"Start time: {start_time:.2f} seconds")
 
         end_time = st.slider("Select end time", 0.0, duration, duration, 0.01)
         end_frame = get_frame_at_time(video, end_time)
-        st.image(end_frame, caption=f"End Frame at {end_time:.2f} seconds", use_column_width=True)
+        if end_frame:
+            st.image(end_frame, caption=f"End Frame at {end_time:.2f} seconds", use_column_width=True)
         st.text(f"End time: {end_time:.2f} seconds")
 
         if st.button("Calculate Time Elapsed"):
@@ -60,3 +66,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
