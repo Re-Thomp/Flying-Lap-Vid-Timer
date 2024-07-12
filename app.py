@@ -1,3 +1,4 @@
+# Thank you Chat
 import streamlit as st
 from moviepy.editor import VideoFileClip
 import tempfile
@@ -15,11 +16,13 @@ def get_frame_at_time(video, time):
         return None
 
 def main():
-    st.title("Video Timing Web Application")
+    st.title("Flying Lap Video Timer")
+    st.text("By Reno T.")
 
     # Page 1: Import video
-    st.header("Import Video")
     uploaded_file = st.file_uploader("Choose a video file", type=["mp4", "mov", "avi", "mkv"])
+    st.text("Crop or compress videos above 200mb")
+    st.text("*Please be patient while the video is uploading")
     
     if uploaded_file is not None:
         # Save the uploaded video file to a temporary location
@@ -43,13 +46,11 @@ def main():
         start_frame = get_frame_at_time(video, start_time)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.2f} seconds", use_column_width=True)
-        st.text(f"Start time: {start_time:.2f} seconds")
 
         end_time = st.slider("Select end time", 0.0, adjusted_duration, adjusted_duration, 0.01)
         end_frame = get_frame_at_time(video, end_time)
         if end_frame:
             st.image(end_frame, caption=f"End Frame at {end_time:.2f} seconds", use_column_width=True)
-        st.text(f"End time: {end_time:.2f} seconds")
 
         if st.button("Calculate Time Elapsed"):
             if start_time < end_time:
