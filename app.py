@@ -27,18 +27,20 @@ def main():
         
         if uploaded_file is not None:
             st.session_state.uploaded_file = uploaded_file
+            st.session_state.temp_file_path = None
             st.experimental_rerun()
     else:
         st.text("Uploading...")
 
-        # Save the uploaded video file to a temporary location
-        temp_file = tempfile.NamedTemporaryFile(delete=False)
-        temp_file.write(st.session_state.uploaded_file.read())
-        temp_file.close()
-        
-        # Load video using moviepy
+        if st.session_state.temp_file_path is None:
+            # Save the uploaded video file to a temporary location
+            temp_file = tempfile.NamedTemporaryFile(delete=False)
+            temp_file.write(st.session_state.uploaded_file.read())
+            temp_file.close()
+            st.session_state.temp_file_path = temp_file.name
+
         try:
-            video = VideoFileClip(temp_file.name)
+            video = VideoFileClip(st.session_state.temp_file_path)
             fps = video.fps
             duration = video.duration
 
@@ -68,13 +70,15 @@ def main():
             
             if st.button("Time Another Video"):
                 st.session_state.uploaded_file = None
-                st.experimental_rerun()
+                st.session_state.temp_file_path = None
+                st.rerun()
         except Exception as e:
             st.error(f"Error processing video: {e}")
 
         # Clean up the temporary file
-        os.unlink(temp_file.name)
+        if st.session_state.temp_file_path:
+            os.unlink(st.session_state.temp_file_path)
+            st.session_state.temp_file_path = None
 
 if __name__ == "__main__":
     main()
-    
