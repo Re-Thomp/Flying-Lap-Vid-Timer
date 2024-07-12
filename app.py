@@ -7,7 +7,7 @@ from PIL import Image
 import numpy as np
 
 def get_frame_at_time(video, time):
-    """Extracts a frame from the video at the specified time."""
+    # Extracts a frame from the video given time
     try:
         frame = video.get_frame(time)
         return Image.fromarray(frame)
@@ -20,23 +20,23 @@ def main():
     st.text("By Reno T.")
     st.markdown("***")
 
-    # Page 1: Import video
+    # Import video
     uploaded_file = st.file_uploader("Choose a video file (crop or compress files larger than 200mb)", type=["mp4", "mov", "avi", "mkv"])
     st.caption("*Please be patient while the video is uploading")
     st.markdown("***")
     
     if uploaded_file is not None:
-        # Save the uploaded video file to a temporary location
+        # Save uploaded video file to temp
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         temp_file.write(uploaded_file.read())
         temp_file.close()
         
-        # Load video using moviepy
+        # Load video with moviepy
         video = VideoFileClip(temp_file.name)
         fps = video.fps
         duration = video.duration
 
-        # Adjust the duration to remove the last frame
+        # Adjust duration to remove last frame
         adjusted_duration = duration - (1 / fps)
 
         # Select start and end points with frame preview
@@ -58,7 +58,7 @@ def main():
         st.markdown("***")
         st.caption("Restart web page to time another video")
 
-        # Clean up the temporary file
+        # Clean up temporary file
         os.unlink(temp_file.name)
 
 if __name__ == "__main__":
