@@ -58,7 +58,7 @@ def main():
         st.markdown("***")
         if st.button("Time Another Video"):
             os.unlink(temp_file.name)
-            st.experimental_rerun()
+            st.rerun()
 
         # Clean up the temporary file
         os.unlink(temp_file.name)
