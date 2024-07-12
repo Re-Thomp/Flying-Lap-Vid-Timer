@@ -32,19 +32,20 @@ def main():
         fps = video.fps
         duration = video.duration
 
-        st.video(uploaded_file)
-
         st.header("Select Start and End Points")
         st.text("Use the slider to select start and end points")
 
+        # Adjust the duration to remove the last frame
+        adjusted_duration = duration - (1 / fps)
+
         # Select start and end points with frame preview
-        start_time = st.slider("Select start time", 0.0, duration, 0.0, 0.01)
+        start_time = st.slider("Select start time", 0.0, adjusted_duration, 0.0, 0.01)
         start_frame = get_frame_at_time(video, start_time)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.2f} seconds", use_column_width=True)
         st.text(f"Start time: {start_time:.2f} seconds")
 
-        end_time = st.slider("Select end time", 0.0, duration, duration, 0.01)
+        end_time = st.slider("Select end time", 0.0, adjusted_duration, adjusted_duration, 0.01)
         end_frame = get_frame_at_time(video, end_time)
         if end_frame:
             st.image(end_frame, caption=f"End Frame at {end_time:.2f} seconds", use_column_width=True)
@@ -56,10 +57,8 @@ def main():
                 time_elapsed = frames_elapsed / fps
                 st.success(f"Time Elapsed: {time_elapsed:.2f} seconds")
 
-                if st.button("Time Another Video"):
-                    st.experimental_rerun()
-            else:
-                st.error("End time must be greater than start time")
+        if st.button("Time Another Video"):
+            st.experimental_rerun()
 
         # Clean up the temporary file
         os.unlink(temp_file.name)
