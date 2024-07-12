@@ -40,20 +40,19 @@ def main():
         adjusted_duration = duration - (1 / fps)
 
         # Select start and end points with frame preview
-        start_time = st.slider("Select start time", 0.0, adjusted_duration, 0.0, step=0.001)
+        start_time = st.slider("Select start time (line up blade tip with start line in preview", 0.0, adjusted_duration, 0.0, 0.0001)
         start_frame = get_frame_at_time(video, start_time)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
 
-        end_time = st.slider("Select end time", 0.0, adjusted_duration, adjusted_duration, step=0.001)
+        end_time = st.slider("Select end time", 0.0, adjusted_duration, adjusted_duration, 0.0001)
         end_frame = get_frame_at_time(video, end_time)
         if end_frame:
             st.image(end_frame, caption=f"End Frame at {end_time:.3f} seconds", use_column_width=True)
 
         if st.button("Calculate Time Elapsed"):
             if start_time < end_time:
-                frames_elapsed = (end_time - start_time) * fps
-                time_elapsed = frames_elapsed / fps
+                time_elapsed = end_time - start_time
                 st.success(f"Time Elapsed: {time_elapsed:.2f} seconds")
 
         if st.button("Time Another Video"):
