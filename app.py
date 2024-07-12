@@ -22,7 +22,7 @@ def main():
 
     # Import video
     uploaded_file = st.file_uploader("Choose a video file (crop or compress files larger than 200mb)", type=["mp4", "mov", "avi", "mkv"])
-    st.caption("*Please be patient while the video is uploading")
+    st.caption("*The video may take some time to upload")
     st.markdown("***")
     
     if uploaded_file is not None:
@@ -36,8 +36,8 @@ def main():
         fps = video.fps
         duration = video.duration
 
-        # Adjust duration to remove last frame
-        adjusted_duration = duration - (1 / fps)
+        # Remove last two frames to fix moviepy issue
+        adjusted_duration = duration - (2 / fps)
 
         # Select start and end points with frame preview
         start_time = st.slider("Select startpoint (line up blade tip and start line in preview image)", 0.0, adjusted_duration, 0.0, 0.01)
