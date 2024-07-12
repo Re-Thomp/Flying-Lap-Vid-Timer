@@ -18,15 +18,22 @@ def main():
     st.title("Video Timing Web Application")
 
     # Page 1: Import video
-    st.header("Import Video")
-    uploaded_file = st.file_uploader("Choose a video file", type=["mp4", "mov", "avi", "mkv"])
-    
-    if uploaded_file is not None:
+    if "uploaded_file" not in st.session_state:
+        st.session_state.uploaded_file = None
+
+    if st.session_state.uploaded_file is None:
+        st.header("Import Video")
+        uploaded_file = st.file_uploader("Choose a video file", type=["mp4", "mov", "avi", "mkv"])
+        
+        if uploaded_file is not None:
+            st.session_state.uploaded_file = uploaded_file
+            st.experimental_rerun()
+    else:
         st.text("Uploading...")
 
         # Save the uploaded video file to a temporary location
         temp_file = tempfile.NamedTemporaryFile(delete=False)
-        temp_file.write(uploaded_file.read())
+        temp_file.write(st.session_state.uploaded_file.read())
         temp_file.close()
         
         # Load video using moviepy
@@ -56,11 +63,12 @@ def main():
                     frames_elapsed = (end_time - start_time) * fps
                     time_elapsed = frames_elapsed / fps
                     st.success(f"Time Elapsed: {time_elapsed:.2f} seconds")
-
-                    if st.button("Time Another Video"):
-                        st.experimental_rerun()
                 else:
                     st.error("End time must be greater than start time")
+            
+            if st.button("Time Another Video"):
+                st.session_state.uploaded_file = None
+                st.experimental_rerun()
         except Exception as e:
             st.error(f"Error processing video: {e}")
 
@@ -69,3 +77,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
