@@ -43,12 +43,12 @@ def main():
         start_time = st.slider("Select startpoint (line up blade tip and start line in preview image)", 0.0, adjusted_duration, 0.0, 0.01)
         start_frame = get_frame_at_time(video, start_time)
         if start_frame:
-            st.image(start_frame, caption=f"Start Frame at {start_time:.2f} seconds", use_column_width=True)
+            st.image(start_frame, caption=f"Start Frame at {start_time:.4f} seconds", use_column_width=True)
 
         end_time = st.slider("Select endpoint", 0.0, adjusted_duration, adjusted_duration, 0.01)
         end_frame = get_frame_at_time(video, end_time)
         if end_frame:
-            st.image(end_frame, caption=f"End Frame at {end_time:.2f} seconds", use_column_width=True)
+            st.image(end_frame, caption=f"End Frame at {end_time:.4f} seconds", use_column_width=True)
 
         if st.button("Calculate lap time"):
             if start_time < end_time:
