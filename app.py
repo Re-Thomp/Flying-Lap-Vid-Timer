@@ -34,9 +34,6 @@ def main():
         fps = video.fps
         duration = video.duration
 
-        st.header("Select Start and End Points")
-        st.text("Use the slider to select start and end points")
-
         # Adjust the duration to remove the last frame
         adjusted_duration = duration - (1 / fps)
 
