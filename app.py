@@ -2,6 +2,13 @@ import streamlit as st
 from moviepy.editor import VideoFileClip
 import tempfile
 import os
+from PIL import Image
+import numpy as np
+
+def get_frame_at_time(video, time):
+    """Extracts a frame from the video at the specified time."""
+    frame = video.get_frame(time)
+    return Image.fromarray(frame)
 
 def main():
     st.title("Video Timing Web Application")
@@ -26,12 +33,16 @@ def main():
         st.header("Select Start and End Points")
         st.text("Use the slider to select start and end points")
 
-        # Select start and end points
+        # Select start and end points with frame preview
         start_time = st.slider("Select start time", 0.0, duration, 0.0, 0.01)
-        st.text(f"Start time: {start_time} seconds")
+        start_frame = get_frame_at_time(video, start_time)
+        st.image(start_frame, caption=f"Start Frame at {start_time:.2f} seconds", use_column_width=True)
+        st.text(f"Start time: {start_time:.2f} seconds")
 
         end_time = st.slider("Select end time", 0.0, duration, duration, 0.01)
-        st.text(f"End time: {end_time} seconds")
+        end_frame = get_frame_at_time(video, end_time)
+        st.image(end_frame, caption=f"End Frame at {end_time:.2f} seconds", use_column_width=True)
+        st.text(f"End time: {end_time:.2f} seconds")
 
         if st.button("Calculate Time Elapsed"):
             if start_time < end_time:
