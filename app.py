@@ -40,12 +40,12 @@ def main():
         adjusted_duration = duration - (1 / fps)
 
         # Select start and end points with frame preview
-        start_time = st.slider("Select start time (line up blade tip with start line in preview)", 0.0, adjusted_duration, 0.0, 0.0001)
+        start_time = st.slider("Select start time (line up blade tip with start line in preview)", 0.0, adjusted_duration, 0.0, 0.01)
         start_frame = get_frame_at_time(video, start_time)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
 
-        end_time = st.slider("Select end time", 0.0, adjusted_duration, adjusted_duration, 0.0001)
+        end_time = st.slider("Select end time", 0.0, adjusted_duration, adjusted_duration, 0.01)
         end_frame = get_frame_at_time(video, end_time)
         if end_frame:
             st.image(end_frame, caption=f"End Frame at {end_time:.3f} seconds", use_column_width=True)
@@ -57,7 +57,6 @@ def main():
 
         st.markdown("***")
         if st.button("Time Another Video"):
-            os.unlink(temp_file.name)
             st.rerun()
 
         # Clean up the temporary file
