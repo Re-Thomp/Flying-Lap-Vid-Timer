@@ -56,7 +56,7 @@ def main():
                 st.success(f"Time Elapsed: {time_elapsed:.2f} seconds")
 
         st.markdown("***")
-        st.subheading("Restart web page to time another video")
+        st.subheader("Restart web page to time another video")
 
         # Clean up the temporary file
         os.unlink(temp_file.name)
