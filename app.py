@@ -20,9 +20,8 @@ def main():
     st.text("By Reno T.")
 
     # Page 1: Import video
-    uploaded_file = st.file_uploader("Choose a video file", type=["mp4", "mov", "avi", "mkv"])
-    st.text("Crop or compress videos above 200mb")
-    st.text("*Please be patient while the video is uploading")
+    uploaded_file = st.file_uploader("Choose a video file (crop or compress files larger than 200mb)", type=["mp4", "mov", "avi", "mkv"])
+    st.subheader("*Please be patient while the video is uploading")
     
     if uploaded_file is not None:
         # Save the uploaded video file to a temporary location
