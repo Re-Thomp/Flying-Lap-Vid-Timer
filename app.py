@@ -17,9 +17,8 @@ def get_frame_at_time(video_cap, point):
         return None
 
 def get_time(vid):
-    v = cv2.VideoCapture(vid)
-    if v.set(cv2.CAP_PROP_POS_AVI_RATIO, 1):
-        return v.get(cv2.CAP_PROP_POS_MSEC)
+    if vid.set(cv2.CAP_PROP_POS_AVI_RATIO, 1):
+        return vid.get(cv2.CAP_PROP_POS_MSEC)
     return None
     
 
@@ -54,7 +53,7 @@ def main():
             st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
             st.caption(f"Video FPS: {fps}")
             st.caption(f"Start Point: {start_point}")
-            fps2 = get_time(cap)
+            fps2 = total_frames / get_time(cap)
             st.caption(f"Video FPS2: {fps2}")
 
         end_point = st.slider("Select end frame", 0, total_frames, total_frames, 1)
