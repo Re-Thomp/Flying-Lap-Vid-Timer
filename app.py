@@ -7,13 +7,15 @@ from PIL import Image
 import numpy as np
 import cv2
 
-def get_frame_at_time(video, time):
-    # Extracts an image from the video given time
-    try:
-        frame = video.get_frame(time)
-        return Image.fromarray(frame)
-    except Exception as e:
-        st.error(f"Error extracting frame at {time} seconds: {e}")
+def get_frame_at_time(video_cap, time):
+    # Extracts an image from the video given time (in seconds)
+    frame_number = int(time * video_cap.get(cv2.CAP_PROP_FPS))
+    video_cap.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
+    _, frame = video_cap.read()
+    if frame is not None:
+        return Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
+    else:
+        st.error(f"Error extracting frame at {time} seconds.")
         return None
 
 def frames_count(handler):
