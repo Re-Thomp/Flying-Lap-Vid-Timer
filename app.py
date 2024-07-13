@@ -6,7 +6,7 @@ from PIL import Image
 import numpy as np
 import cv2
 
-def get_frame_at_time(video_cap, point):
+def get_frame(video_cap, point):
     # Extracts an image from the video given the frame number
     video_cap.set(cv2.CAP_PROP_POS_FRAMES, point)
     _, frame = video_cap.read()
@@ -46,22 +46,20 @@ def main():
         video_path = temp_file.name
         cap = cv2.VideoCapture(video_path)
         total_frames = count_frames(cap)
-        duration_ms = cap.get(cv2.CAP_PROP_POS_MSEC, total_frames)
-        fps = total_frames / (total_frames / (duration_ms / 1000.0))
+        fps = cap.get(cv2.CAP_PROP_FPS)
 
         # Select start and end points with frame preview
         start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, total_frames, 0, 1)
+        start_frame = get_frame(cap, start_point)
         start_time = start_point / float(fps)
-        start_frame = get_frame_at_time(cap, start_point)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
-            legacyfps = cap.get(cv2.CAP_PROP_FPS)
             st.caption(f"Legacy video FPS: {legacyfps}")
             st.caption(f"New FPS: {fps}")
 
         end_point = st.slider("Select end frame", 0, total_frames, total_frames, 1)
+        end_frame = get_frame(cap, end_point)
         end_time = end_point / float(fps)
-        end_frame = get_frame_at_time(cap, end_point)
         if end_frame:
             st.image(end_frame, caption=f"End Frame at {end_time:.3f} seconds", use_column_width=True)
             st.caption(f"End Point: {end_point}")
