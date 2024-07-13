@@ -55,14 +55,14 @@ def main():
         # Select start and end points with frame preview
         start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, total_frames, 0, 1)
         start_frame = get_frame(cap, start_point)
-        start_time = frame_time(start_point)
+        start_time = frame_time(cap, start_point)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
             st.caption(f"New FPS: {fps}")
 
         end_point = st.slider("Select end frame", 0, total_frames, total_frames, 1)
         end_frame = get_frame(cap, end_point)
-        end_time = frame_time(end_point)
+        end_time = frame_time(cap, end_point)
         if end_frame:
             st.image(end_frame, caption=f"End Frame at {end_time:.3f} seconds", use_column_width=True)
             st.caption(f"End Point: {end_point}")
