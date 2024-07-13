@@ -47,7 +47,6 @@ def main():
         fps = video.fps
         total = frames_count(cv2.VideoCapture(video_path))
         framesit = total - 1
-        duration = framesit * fps
 
         # Select start and end points with frame preview
         start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, framesit, 0, 1)
