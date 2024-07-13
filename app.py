@@ -46,7 +46,7 @@ def main():
         video = VideoFileClip(temp_file.name)
         fps = video.fps
         cap = cv2.VideoCapture(temp_file.name)
-        total = frames_count(frames)
+        total = frames_count(temp_file.name)
         framesit = total - 1
         duration = framesit * fps
 
