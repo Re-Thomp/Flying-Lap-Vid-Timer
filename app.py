@@ -25,7 +25,7 @@ def get_time(vid, length):
 def main():
     st.title("Flying Lap Video Timer")
     st.text("By Reno T.")
-    st.caption("*potentially a little innacurate")
+    st.caption("*potentially a little innacurate, currently debugging")
     st.markdown("***")
 
     # Import video
@@ -53,7 +53,7 @@ def main():
             st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
             st.caption(f"Video FPS: {fps}")
             st.caption(f"Start Point: {start_point}")
-            time = get_time(cap, total_frames)
+            time = total_frames / (get_time(cap, total_frames)/100)
             st.caption(f"Video duration in ms: {time}")
 
         end_point = st.slider("Select end frame", 0, total_frames, total_frames, 1)
