@@ -20,6 +20,16 @@ def get_time(vid, length):
     if vid.set(cv2.CAP_PROP_POS_FRAMES, length):
         return vid.get(cv2.CAP_PROP_POS_MSEC)
     return None
+
+def count_frames(video):
+    total_frames = 0
+    while True:
+        ret, _ = video.read()
+        if not ret:
+            break
+        total_frames += 1
+    video.release()
+    return total_frames
     
 
 def main():
@@ -42,7 +52,7 @@ def main():
         # Load video and find stats
         video_path = temp_file.name
         cap = cv2.VideoCapture(video_path)
-        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) - 1 
+        total_frames = count_frames(cap) 
         fps = total_frames / (get_time(cap, total_frames)/100)
 
         # Select start and end points with frame preview
