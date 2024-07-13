@@ -71,7 +71,9 @@ def main():
         st.markdown("***")
         st.caption("Restart web page to time another video")
 
-        # Clean up temporary file
+        # Clean up
+        cap.release()
+        video.close()
         os.unlink(temp_file.name)
 
 if __name__ == "__main__":
