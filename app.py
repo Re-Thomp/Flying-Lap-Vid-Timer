@@ -33,7 +33,7 @@ def main():
 
     # Import video
     uploaded_file = st.file_uploader("Choose a video file (crop or compress files larger than 200mb)", type=["mp4", "mov", "avi", "mkv"])
-    st.caption("*The video may take some time to upload")
+    st.caption("*May take some time to upload")
     st.markdown("***")
     
     if uploaded_file is not None:
@@ -45,9 +45,9 @@ def main():
         # Load video with moviepy and opencv
         video = VideoFileClip(temp_file.name)
         fps = video.fps
-        cap = cv2.VideoCapture("temp_file.name")
+        cap = cv2.VideoCapture(temp_file.name)
         total = frames_count(frames)
-        framesit = frames - 1
+        framesit = total - 1
         duration = framesit * fps
 
         # Select start and end points with frame preview
