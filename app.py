@@ -16,7 +16,7 @@ def get_frame_at_time(video_cap, point):
         st.error(f"Error extracting frame at {point} frames.")
         return None
 
-def get_time(vid)
+def get_time(vid):
     v = cv2.VideoCapture(vid)
     if v.set(cv2.CAP_PROP_POS_AVI_RATIO, 1):
         return v.get(cv2.CAP_PROP_POS_MSEC)
