@@ -25,7 +25,7 @@ def frames_count(handler):
         if not status:
             break
         frames += 1
-    return frames 
+    return frames
 
 def main():
     st.title("Flying Lap Video Timer")
@@ -36,29 +36,29 @@ def main():
     uploaded_file = st.file_uploader("Choose a video file (crop or compress files larger than 200mb)", type=["mp4", "mov", "avi", "mkv"])
     st.caption("*May take some time to upload")
     st.markdown("***")
-    
+   
     if uploaded_file is not None:
+        st.text("Uploading...")
         # Save uploaded video file to temp
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         temp_file.write(uploaded_file.read())
         temp_file.close()
-        
+       
         # Load video and find stats
         video_path = temp_file.name
-        video = VideoFileClip(video_path)
-        fps = video.fps
         cap = cv2.VideoCapture(video_path)
-        total = frames_count(cap)
-        framesit = total - 1
+        fps = cap.get(cv2.CAP_PROP_FPS)
+        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) - 1  # Remove last frame
+        duration = total_frames / fps
 
         # Select start and end points with frame preview
-        start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, framesit, 0, 1)
+        start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, total_frames, 0, 1)
         start_time = start_point / fps
         start_frame = get_frame_at_time(cap, start_time)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.4f} seconds", use_column_width=True)
 
-        end_point = st.slider("Select end frame", 0, framesit, framesit, 1)
+        end_point = st.slider("Select end frame", 0, total_frames, total_frames, 1)
         end_time = end_point / fps
         end_frame = get_frame_at_time(cap, end_time)
         if end_frame:
@@ -74,7 +74,6 @@ def main():
 
         # Clean up
         cap.release()
-        video.close()
         os.unlink(temp_file.name)
 
 if __name__ == "__main__":
