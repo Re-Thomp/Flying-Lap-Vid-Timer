@@ -16,14 +16,18 @@ def get_frame(video_cap, point):
         st.error(f"Error extracting frame at {point} frames.")
         return None
 
+def frame_time(video_cap, point):
+    video_cap.set(cv2.CAP_PROP_POS_FRAMES, point)
+    return v.get(cv.CAP_PROP_POS_MSEC)
+
 def count_frames(video):
-    total_frames = 0
+    total = 0
     while True:
         ret, _ = video.read()
         if not ret:
             break
-        total_frames += 1
-    return total_frames
+        total += 1
+    return total - 1
 
 def main():
     st.title("Flying Lap Video Timer")
@@ -51,14 +55,14 @@ def main():
         # Select start and end points with frame preview
         start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, total_frames, 0, 1)
         start_frame = get_frame(cap, start_point)
-        start_time = start_point / float(fps)
+        start_time = frame_time(start_point)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
             st.caption(f"New FPS: {fps}")
 
         end_point = st.slider("Select end frame", 0, total_frames, total_frames, 1)
         end_frame = get_frame(cap, end_point)
-        end_time = end_point / float(fps)
+        end_time = frame_time(end_point)
         if end_frame:
             st.image(end_frame, caption=f"End Frame at {end_time:.3f} seconds", use_column_width=True)
             st.caption(f"End Point: {end_point}")
