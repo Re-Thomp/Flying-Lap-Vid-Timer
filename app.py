@@ -45,9 +45,10 @@ def main():
         
         # Load video and find stats
         video_path = temp_file.name
-        video = VideoFileClip(temp_file.name)
+        video = VideoFileClip(video_path)
         fps = video.fps
-        total = frames_count(cv2.VideoCapture(video_path))
+        cap = cv2.VideoCapture(video_path)
+        total = frames_count(cap)
         framesit = total - 1
 
         # Select start and end points with frame preview
