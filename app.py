@@ -41,13 +41,13 @@ def main():
 
         # Select start and end points with frame preview
         start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, total_frames, 0, 1)
-        start_time = start_point / fps
+        start_time = start_point / float(fps)
         start_frame = get_frame_at_time(cap, start_point)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
 
         end_point = st.slider("Select end frame", 0, total_frames, total_frames, 1)
-        end_time = end_point / fps
+        end_time = end_point / float(fps)
         end_frame = get_frame_at_time(cap, end_point)
         if end_frame:
             st.image(end_frame, caption=f"End Frame at {end_time:.3f} seconds", use_column_width=True)
