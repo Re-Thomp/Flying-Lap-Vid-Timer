@@ -7,10 +7,9 @@ from PIL import Image
 import numpy as np
 import cv2
 
-def get_frame_at_time(video_cap, time):
+def get_frame_at_time(video_cap, point):
     # Extracts an image from the video given time (in seconds)
-    frame_number = int(time * video_cap.get(cv2.CAP_PROP_FPS))
-    video_cap.set(cv2.CAP_PROP_POS_FRAMES, frame_number)
+    video_cap.set(cv2.CAP_PROP_POS_FRAMES, point)
     _, frame = video_cap.read()
     if frame is not None:
         return Image.fromarray(cv2.cvtColor(frame, cv2.COLOR_BGR2RGB))
@@ -38,7 +37,6 @@ def main():
     st.markdown("***")
    
     if uploaded_file is not None:
-        st.text("Uploading...")
         # Save uploaded video file to temp
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         temp_file.write(uploaded_file.read())
@@ -54,13 +52,13 @@ def main():
         # Select start and end points with frame preview
         start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, total_frames, 0, 1)
         start_time = start_point / fps
-        start_frame = get_frame_at_time(cap, start_time)
+        start_frame = get_frame_at_time(cap, start_point)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.4f} seconds", use_column_width=True)
 
         end_point = st.slider("Select end frame", 0, total_frames, total_frames, 1)
         end_time = end_point / fps
-        end_frame = get_frame_at_time(cap, end_time)
+        end_frame = get_frame_at_time(cap, end_point)
         if end_frame:
             st.image(end_frame, caption=f"End Frame at {end_time:.4f} seconds", use_column_width=True)
 
