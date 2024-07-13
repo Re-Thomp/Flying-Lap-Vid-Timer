@@ -7,9 +7,8 @@ from PIL import Image
 import numpy as np
 import cv2
 
-def get_frame_at_time(video, point, fps):
+def get_frame_at_time(video, time):
     # Extracts an image from the video given time
-    time = point * fps
     try:
         frame = video.get_frame(time)
         return Image.fromarray(frame)
@@ -53,13 +52,13 @@ def main():
         # Select start and end points with frame preview
         start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, framesit, 0, 1)
         start_time = start_point * fps
-        start_frame = get_frame_at_time(video, start_time, fps)
+        start_frame = get_frame_at_time(video, start_time)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.4f} seconds", use_column_width=True)
 
         end_point = st.slider("Select end frame", 0, framesit, framesit, 1)
         end_time = end_point * fps
-        end_frame = get_frame_at_time(video, end_time, fps)
+        end_frame = get_frame_at_time(video, end_time)
         if end_frame:
             st.image(end_frame, caption=f"End Frame at {end_time:.4f} seconds", use_column_width=True)
 
