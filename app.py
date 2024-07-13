@@ -4,7 +4,7 @@ import tempfile
 import os
 from PIL import Image
 import numpy as np
-import imageio-ffmpeg
+import imageio
 
 def get_frame(video_reader, point):
     # Extracts an image from the video given the frame number
@@ -70,7 +70,6 @@ def main():
         st.caption("Restart web page to time another video")
 
         # Clean up
-        cap.release()
         os.unlink(temp_file.name)
 
 if __name__ == "__main__":
