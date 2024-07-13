@@ -5,7 +5,6 @@ import tempfile
 import os
 from PIL import Image
 import numpy as np
-import cv2
 
 def get_frame_at_time(video, point):
     # Extracts an image from the video given time
@@ -42,12 +41,12 @@ def main():
         temp_file.write(uploaded_file.read())
         temp_file.close()
         
-        # Load video with moviepy and opencv
-        video = VideoFileClip(temp_file.name)
-        fps = video.fps
-        total = frames_count('temp_file.name')
+        # Load video with moviepy
+        total = frames_count(temp_file.name)
         framesit = total - 1
         duration = framesit * fps
+        video = VideoFileClip(temp_file.name)
+        fps = video.fps
 
         # Select start and end points with frame preview
         start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, framesit, 0, 1)
