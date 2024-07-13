@@ -45,7 +45,7 @@ def main():
         # Load video with moviepy and opencv
         video = VideoFileClip(temp_file.name)
         fps = video.fps
-        cap = cv2.VideoCapture(temp_file.name)
+        cap = cv2.VideoCapture("temp_file.name")
         total = frames_count(frames)
         framesit = frames - 1
         duration = framesit * fps
