@@ -46,7 +46,7 @@ def main():
         video_path = temp_file.name
         cap = cv2.VideoCapture(video_path)
         total_frames = count_frames(cap)
-        duration_ms = cap.get(cv2.CAP_PROP_POS_MSEC)
+        duration_ms = cap.get(cv2.CAP_PROP_POS_MSEC, total_frames)
         fps = total_frames / (total_frames / (duration_ms / 1000.0))
 
         # Select start and end points with frame preview
