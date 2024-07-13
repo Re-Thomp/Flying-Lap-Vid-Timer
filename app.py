@@ -9,8 +9,8 @@ import cv2
 
 def get_frame_at_time(video, point):
     # Extracts an image from the video given time
+    time = point * fps
     try:
-        time = point * fps
         frame = video.get_frame(time)
         return Image.fromarray(frame)
     except Exception as e:
