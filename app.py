@@ -16,8 +16,8 @@ def get_frame_at_time(video_cap, point):
         st.error(f"Error extracting frame at {point} frames.")
         return None
 
-def get_time(vid):
-    if vid.set(cv2.CAP_PROP_POS_AVI_RATIO, 1):
+def get_time(vid, length):
+    if vid.set(cv2.CAP_PROP_POS_FRAMES, length):
         return vid.get(cv2.CAP_PROP_POS_MSEC)
     return None
     
@@ -53,7 +53,7 @@ def main():
             st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
             st.caption(f"Video FPS: {fps}")
             st.caption(f"Start Point: {start_point}")
-            fps2 = total_frames / (get_time(cap) / 1000)
+            fps2 = total_frames / (get_time(cap, total_frames) / 1000)
             st.caption(f"Video FPS2: {fps2}")
 
         end_point = st.slider("Select end frame", 0, total_frames, total_frames, 1)
