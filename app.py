@@ -4,6 +4,7 @@ import tempfile
 import os
 from PIL import Image
 import imageio
+import imageio_ffmpeg as ffmpeg
 
 def get_frame(video_reader, point):
     try:
@@ -35,9 +36,10 @@ def main():
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         temp_file.write(uploaded_file.read())
         temp_file.close()
-       
+    
         # Load video and find stats
         video_path = temp_file.name
+        imageio.plugins.ffmpeg.download()
         video_reader = imageio.get_reader(video_path)
         total_frames = count_frames(video_reader)
 
