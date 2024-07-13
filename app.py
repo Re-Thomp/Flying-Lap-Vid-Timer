@@ -28,9 +28,7 @@ def count_frames(video):
         if not ret:
             break
         total_frames += 1
-    video.release()
     return total_frames
-    
 
 def main():
     st.title("Flying Lap Video Timer")
