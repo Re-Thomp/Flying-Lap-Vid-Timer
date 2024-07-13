@@ -3,16 +3,14 @@ import streamlit as st
 import tempfile
 import os
 from PIL import Image
-import numpy as np
 import imageio
 
 def get_frame(video_reader, point):
-    # Extracts an image from the video given the frame number
-    frame = video_reader.get_data(point)
-    if frame is not None:
+    try:
+        frame = video_reader.get_data(point)
         return Image.fromarray(frame)
-    else:
-        st.error(f"Error extracting frame at {point} frames.")
+    except Exception as e:
+        st.error(f"Error extracting frame at {point} frames: {e}")
         return None
 
 def frame_time(video_reader, point):
@@ -24,14 +22,14 @@ def count_frames(video_reader):
 def main():
     st.title("Flying Lap Video Timer")
     st.text("By Reno T.")
-    st.caption("*potentially a little innacurate, currently debugging")
+    st.caption("*potentially a little inaccurate, currently debugging")
     st.markdown("***")
 
     # Import video
     uploaded_file = st.file_uploader("Choose a video file (crop or compress files larger than 200mb)", type=["mp4", "mov", "avi", "mkv"])
     st.caption("*May take some time to upload")
     st.markdown("***")
-   
+
     if uploaded_file is not None:
         # Save uploaded video file to temp
         temp_file = tempfile.NamedTemporaryFile(delete=False)
@@ -60,9 +58,9 @@ def main():
             if start_time < end_time:
                 time_elapsed = end_time - start_time
                 st.success(f"Your lap time is {time_elapsed:.2f} seconds!")
-            if start_time == end_time:
+            elif start_time == end_time:
                 st.success(f"Zero seconds?")
-            if start_time > end_time:
+            else:
                 time_elapsed = start_time - end_time
                 st.success(f"Your lap time is -{time_elapsed:.2f} seconds?")
 
