@@ -56,7 +56,7 @@ def main():
             if start_time < end_time:
                 time_elapsed = end_time - start_time
                 st.success(f"Your lap time is {time_elapsed:.2f} seconds!")
-            if start_time = end_time:
+            if start_time == end_time:
                 st.success(f"Zero seconds?")
             if start_time > end_time:
                 time_elapsed = start_time - end_time
