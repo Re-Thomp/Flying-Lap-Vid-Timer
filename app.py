@@ -42,8 +42,8 @@ def main():
         # Load video and find stats
         video_path = temp_file.name
         cap = cv2.VideoCapture(video_path)
-        fps = cap.get(cv2.CAP_PROP_FPS)
         total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) - 1 
+        fps = total_frames / (get_time(cap, total_frames)/100)
 
         # Select start and end points with frame preview
         start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, total_frames, 0, 1)
@@ -51,10 +51,9 @@ def main():
         start_frame = get_frame_at_time(cap, start_point)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
-            st.caption(f"Video FPS: {fps}")
-            st.caption(f"Start Point: {start_point}")
-            time = total_frames / (get_time(cap, total_frames)/100)
-            st.caption(f"Video duration in ms: {time}")
+            legacyfps = cap.get(cv2.CAP_PROP_FPS)
+            st.caption(f"Legacy video FPS: {legacyfps}")
+            st.caption(f"New FPS: {fps}")
 
         end_point = st.slider("Select end frame", 0, total_frames, total_frames, 1)
         end_time = end_point / float(fps)
