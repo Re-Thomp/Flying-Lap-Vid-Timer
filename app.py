@@ -44,7 +44,7 @@ def main():
         
         # Load video and find stats
         video_path = temp_file.name
-        video = VideoFileClip(video_path)
+        video = VideoFileClip(temp_file.name)
         fps = video.fps
         total = frames_count(cv2.VideoCapture(video_path))
         framesit = total - 1
