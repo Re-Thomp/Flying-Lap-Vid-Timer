@@ -36,11 +36,10 @@ def main():
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         temp_file.write(uploaded_file.read())
         temp_file.close()
-    
+        
         # Load video and find stats
         video_path = temp_file.name
-        imageio.plugins.ffmpeg.download()
-        video_reader = imageio.get_reader(video_path)
+        video_reader = imageio.get_reader(video_path, 'ffmpeg')  # Specify 'ffmpeg' as the backend
         total_frames = count_frames(video_reader)
 
         # Select start and end points with frame preview
