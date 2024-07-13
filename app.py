@@ -54,7 +54,7 @@ def main():
             st.caption(f"Video FPS: {fps}")
             st.caption(f"Start Point: {start_point}")
             time = get_time(cap, total_frames)
-            st.caption(f"Video FPS2: {time}")
+            st.caption(f"Video duration in ms: {time}")
 
         end_point = st.slider("Select end frame", 0, total_frames, total_frames, 1)
         end_time = end_point / float(fps)
