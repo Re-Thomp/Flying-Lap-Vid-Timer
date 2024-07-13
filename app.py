@@ -42,7 +42,7 @@ def main():
         temp_file.close()
         
         # Load video with moviepy
-        total = frames_count(temp_file.name)
+        total = frames_count(temp_file)
         framesit = total - 1
         duration = framesit * fps
         video = VideoFileClip(temp_file.name)
