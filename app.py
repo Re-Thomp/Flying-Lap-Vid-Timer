@@ -5,15 +5,26 @@ import tempfile
 import os
 from PIL import Image
 import numpy as np
+import cv2
 
-def get_frame_at_time(video, time):
-    # Extracts a frame from the video given time
+def get_frame_at_time(video, point):
+    # Extracts an image from the video given time
     try:
+        time = point * fps
         frame = video.get_frame(time)
         return Image.fromarray(frame)
     except Exception as e:
         st.error(f"Error extracting frame at {time} seconds: {e}")
         return None
+
+def frames_count(handler):
+    frames = 0
+    while True:
+        status, frame = handler.read()
+        if not status:
+            break
+        frames += 1
+    return frames 
 
 def main():
     st.title("Flying Lap Video Timer")
@@ -31,21 +42,23 @@ def main():
         temp_file.write(uploaded_file.read())
         temp_file.close()
         
-        # Load video with moviepy
+        # Load video with moviepy and opencv
         video = VideoFileClip(temp_file.name)
         fps = video.fps
-        duration = video.duration
-
-        # Remove last two frames to fix moviepy issue
-        adjusted_duration = duration - (2 / fps)
+        cap = cv2.VideoCapture(temp_file.name)
+        total = frames_count(frames)
+        framesit = frames - 1
+        duration = framesit * fps
 
         # Select start and end points with frame preview
-        start_time = st.slider("Select startpoint (line up blade tip and start line in preview image)", 0.0, adjusted_duration, 0.0, 0.01)
+        start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, framesit, 0, 1)
+        start_time = start_point * fps
         start_frame = get_frame_at_time(video, start_time)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.4f} seconds", use_column_width=True)
 
-        end_time = st.slider("Select endpoint", 0.0, adjusted_duration, adjusted_duration, 0.01)
+        end_point = st.slider("Select end frame", 0.0, framesit, framesit, 1)
+        end_time = end_point * fps
         end_frame = get_frame_at_time(video, end_time)
         if end_frame:
             st.image(end_frame, caption=f"End Frame at {end_time:.4f} seconds", use_column_width=True)
