@@ -4,7 +4,7 @@ import tempfile
 import os
 from PIL import Image
 import numpy as np
-import imageio
+import imageio-ffmpeg
 
 def get_frame(video_reader, point):
     # Extracts an image from the video given the frame number
