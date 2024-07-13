@@ -5,6 +5,7 @@ import tempfile
 import os
 from PIL import Image
 import numpy as np
+import cv2
 
 def get_frame_at_time(video, point):
     # Extracts an image from the video given time
@@ -41,11 +42,12 @@ def main():
         temp_file.write(uploaded_file.read())
         temp_file.close()
         
-        # Load video with moviepy
-        total = frames_count(temp_file)
+        # Load video and find stats
+        video_path = temp_file.name
+        total = frames_count(cv2.VideoCapture(video_path))
         framesit = total - 1
         duration = framesit * fps
-        video = VideoFileClip(temp_file.name)
+        video = VideoFileClip(video_path)
         fps = video.fps
 
         # Select start and end points with frame preview
