@@ -15,18 +15,7 @@ def get_frame_at_time(video_cap, point):
     else:
         st.error(f"Error extracting frame at {point} frames.")
         return None
-
-def frames_count(handler):
-    frames = 0
-    while True:
-        status, frame = handler.read()
-        if not status:
-            break
-        frames += 1
-    # Reset to the beginning of the video after counting all frames
-    handler.set(cv2.CAP_PROP_POS_FRAMES, 0)
-    return frames
-
+        
 def main():
     st.title("Flying Lap Video Timer")
     st.text("By Reno T.")
@@ -47,7 +36,7 @@ def main():
         video_path = temp_file.name
         cap = cv2.VideoCapture(video_path)
         fps = cap.get(cv2.CAP_PROP_FPS)
-        total_frames = frames_count(cap) - 1
+        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT)) - 1 
 
         # Select start and end points with frame preview
         start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, total_frames, 0, 1)
