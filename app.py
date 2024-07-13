@@ -18,7 +18,7 @@ def get_frame(video_cap, point):
 
 def frame_time(video_cap, point):
     video_cap.set(cv2.CAP_PROP_POS_FRAMES, point)
-    return v.get(cv.CAP_PROP_POS_MSEC)
+    return video_cap.get(cv.CAP_PROP_POS_MSEC)
 
 def count_frames(video):
     total = 0
