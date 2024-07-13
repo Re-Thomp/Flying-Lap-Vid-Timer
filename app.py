@@ -57,7 +57,7 @@ def main():
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.4f} seconds", use_column_width=True)
 
-        end_point = st.slider("Select end frame", 0.0, framesit, framesit, 1)
+        end_point = st.slider("Select end frame", 0, framesit, framesit, 1)
         end_time = end_point * fps
         end_frame = get_frame_at_time(video, end_time, fps)
         if end_frame:
