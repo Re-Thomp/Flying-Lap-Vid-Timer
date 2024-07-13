@@ -19,6 +19,7 @@ def get_frame_at_time(video_cap, point):
 def main():
     st.title("Flying Lap Video Timer")
     st.text("By Reno T.")
+    st.caption("Potentially innacurate")
     st.markdown("***")
 
     # Import video
