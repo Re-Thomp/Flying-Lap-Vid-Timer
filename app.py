@@ -15,7 +15,14 @@ def get_frame_at_time(video_cap, point):
     else:
         st.error(f"Error extracting frame at {point} frames.")
         return None
-        
+
+def get_time(vid)
+    v = cv2.VideoCapture(vid)
+    if v.set(cv2.CAP_PROP_POS_AVI_RATIO, 1):
+        return v.get(cv2.CAP_PROP_POS_MSEC)
+    return None
+    
+
 def main():
     st.title("Flying Lap Video Timer")
     st.text("By Reno T.")
@@ -47,12 +54,15 @@ def main():
             st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
             st.caption(f"Video FPS: {fps}")
             st.caption(f"Start Point: {start_point}")
+            fps2 = get_time(cap)
+            st.caption(f"Video FPS2: {fps2})
 
         end_point = st.slider("Select end frame", 0, total_frames, total_frames, 1)
         end_time = end_point / float(fps)
         end_frame = get_frame_at_time(cap, end_point)
         if end_frame:
             st.image(end_frame, caption=f"End Frame at {end_time:.3f} seconds", use_column_width=True)
+            st.caption(f"End Point: {end_point}")
 
         if st.button("Calculate lap time"):
             if start_time < end_time:
