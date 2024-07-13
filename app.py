@@ -16,11 +16,6 @@ def get_frame_at_time(video_cap, point):
         st.error(f"Error extracting frame at {point} frames.")
         return None
 
-def get_time(vid, length):
-    if vid.set(cv2.CAP_PROP_POS_FRAMES, length):
-        return vid.get(cv2.CAP_PROP_POS_MSEC)
-    return None
-
 def count_frames(video):
     total_frames = 0
     while True:
@@ -50,8 +45,9 @@ def main():
         # Load video and find stats
         video_path = temp_file.name
         cap = cv2.VideoCapture(video_path)
-        total_frames = count_frames(cap) 
-        fps = total_frames / (get_time(cap, total_frames)/100)
+        total_frames = count_frames(cap)
+        duration_ms = cap.get(cv2.CAP_PROP_POS_MSEC)
+        fps = total_frames / (total_frames / (duration_ms / 1000.0))
 
         # Select start and end points with frame preview
         start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, total_frames, 0, 1)
