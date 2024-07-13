@@ -54,13 +54,13 @@ def main():
         start_time = start_point / fps
         start_frame = get_frame_at_time(cap, start_point)
         if start_frame:
-            st.image(start_frame, caption=f"Start Frame at {start_time:.4f} seconds", use_column_width=True)
+            st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
 
         end_point = st.slider("Select end frame", 0, total_frames, total_frames, 1)
         end_time = end_point / fps
         end_frame = get_frame_at_time(cap, end_point)
         if end_frame:
-            st.image(end_frame, caption=f"End Frame at {end_time:.4f} seconds", use_column_width=True)
+            st.image(end_frame, caption=f"End Frame at {end_time:.3f} seconds", use_column_width=True)
 
         if st.button("Calculate lap time"):
             if start_time < end_time:
