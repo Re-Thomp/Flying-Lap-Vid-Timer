@@ -79,8 +79,8 @@ def main():
         video.reader.close()
         os.unlink(temp_file.name)
 
-    st.caption("""*Disclaimer: to maximize file compatibility, this app uses time increments that may be slightly off from exact frames. 
-            Example time uncertainty: approx. ±0.02s at 60fps and ±0.03s at 30fps for .mp4 with h.264""")
+    st.caption("""*Disclaimer: To maximize file compatibility, this app uses time increments that may be slightly off from exact frames. 
+            Example time uncertainty: approx. ±0.02s at 60fps and ±0.03s at 30fps for .mp4 with h.264.""")
 
 if __name__ == "__main__":
     main()
