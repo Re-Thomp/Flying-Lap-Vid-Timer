@@ -7,14 +7,11 @@ from PIL import Image
 
 def preview_frame(video, time, length, fps):
     try:
-        if time == length:
-            adjust = length - 0.02
-            frame = video.get_frame(adjust)
-            return Image.fromarray(frame)
         if time < length:
             frame = video.get_frame(time)
             return Image.fromarray(frame)
     except Exception as e:
+        frame = video.get_frame(2)
         st.error(f"Error extracting frame at {time:.2f} seconds: {e}")
         st.caption(f"time = {time} and duration = {length}")
         return None
