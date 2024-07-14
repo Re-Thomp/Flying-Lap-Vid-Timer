@@ -8,7 +8,7 @@ from PIL import Image
 def preview_frame(video, time, length, fps):
     try:
         if time == length:
-            adjust = length - 0.01
+            adjust = length - 0.02
             frame = video.get_frame(adjust)
             return Image.fromarray(frame)
         if time < length:
