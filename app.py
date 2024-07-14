@@ -1,4 +1,4 @@
-# Thank you Chat
+# Thank you Chat for the help
 import streamlit as st
 from moviepy.editor import VideoFileClip
 import tempfile
@@ -6,6 +6,7 @@ import os
 from PIL import Image
 
 def preview_frame(video, time):
+# Gets a preview frame given time, compensates for moviepy last frame error
     error_time = time
     try:
         frame = video.get_frame(time)
@@ -29,11 +30,11 @@ def preview_frame(video, time):
 def main():
     st.title("Flying Lap Video Timer")
     st.text("By Reno T.")
-    st.caption("Disclaimer: may be slightly inaccurate (approx. 0.02) to support different file types")
+    st.caption("*For information about accuracy, see bottom of page")
     st.markdown("***")
 
-    # Import video
-    uploaded_file = st.file_uploader("Choose a video file (crop or compress files larger than 200mb)", type=["mp4", "mov", "avi", "mkv"])
+    # Video import window
+    uploaded_file = st.file_uploader("Upload a video file (crop or compress files larger than 200mb)", type=["mp4", "mov", "avi", "mkv"])
     st.caption("*May take some time to upload")
     st.markdown("***")
 
@@ -50,7 +51,7 @@ def main():
         duration = video.duration
 
         # Select start and end points with frame preview
-        start_time = st.slider("Select start (seconds), align blade with start line in preview", 0.0, duration, 0.0, 0.01)
+        start_time = st.slider("Select start (seconds): align blade with start line in preview", 0.0, duration, 0.0, 0.01)
         start_frame = preview_frame(video, start_time)
         if start_frame:
             st.image(start_frame, caption=f"Start frame at {start_time:.2f} seconds", use_column_width=True)
@@ -61,6 +62,7 @@ def main():
             st.image(end_frame, caption=f"End frame at {end_time:.2f} seconds", use_column_width=True)
 
         if st.button("Calculate lap time"):
+        # Results
             if start_time < end_time:
                 time_elapsed = end_time - start_time
                 st.success(f"Your lap time is {time_elapsed:.2f} seconds!")
@@ -70,12 +72,14 @@ def main():
                 time_elapsed = start_time - end_time
                 st.success(f"Your lap time is -{time_elapsed:.2f} seconds?")
 
-        st.markdown("***")
-        st.caption("Restart web page to time another video")
-
         # Clean up
         video.reader.close()
         os.unlink(temp_file.name)
+
+    st.markdown("***")
+    st.caption("Refresh web page to time another video")
+    st.caption("*Disclaimer: to maximize file compatibility, this web app uses time increments that may be slightly different from exact frames. 
+            Example uncertainty: approx. ±0.02s at 60fps and ±0.03s at 30fps for .mp4 with h.264")
 
 if __name__ == "__main__":
     main()
