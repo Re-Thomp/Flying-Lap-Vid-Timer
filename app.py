@@ -78,8 +78,8 @@ def main():
 
     st.markdown("***")
     st.caption("Refresh web page to time another video")
-    st.caption("*Disclaimer: to maximize file compatibility, this web app uses time increments that may be slightly different from exact frames. 
-            Example uncertainty: approx. ±0.02s at 60fps and ±0.03s at 30fps for .mp4 with h.264")
+    st.caption("""*Disclaimer: to maximize file compatibility, this web app uses time increments that may be slightly different from exact frames. 
+            Example uncertainty: approx. ±0.02s at 60fps and ±0.03s at 30fps for .mp4 with h.264""")
 
 if __name__ == "__main__":
     main()
