@@ -35,7 +35,7 @@ def main():
 
     # Video import window
     uploaded_file = st.file_uploader("Upload a video file (crop or compress files larger than 200mb)", type=["mp4", "mov", "avi", "mkv"])
-    st.caption("*May take some time to upload")
+    st.caption("May take some time to upload")
     st.markdown("***")
 
     if uploaded_file is not None:
@@ -79,8 +79,8 @@ def main():
         video.reader.close()
         os.unlink(temp_file.name)
 
-    st.caption("""*Disclaimer: to maximize file compatibility, this web app uses time increments that may be slightly different from exact frames. 
-            Example uncertainty: approx. ±0.02s at 60fps and ±0.03s at 30fps for .mp4 with h.264""")
+    st.caption("""*Disclaimer: to maximize file compatibility, this app uses time increments that may be slightly off from exact frames. 
+            Example time uncertainty: approx. ±0.02s at 60fps and ±0.03s at 30fps for .mp4 with h.264""")
 
 if __name__ == "__main__":
     main()
