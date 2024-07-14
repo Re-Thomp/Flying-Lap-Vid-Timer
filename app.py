@@ -6,13 +6,13 @@ import os
 from PIL import Image
 
 def preview_frame(video, time):
+    error_time = time
     try:
         frame = video.get_frame(time)
         return Image.fromarray(frame)
-        error_time = time
     except Exception as e:
         if isinstance(time, float):
-            for i in range(10):
+            for i in range(15):
                 time -= 0.01
                 try:
                     frame = video.get_frame(time)
@@ -29,7 +29,7 @@ def preview_frame(video, time):
 def main():
     st.title("Flying Lap Video Timer")
     st.text("By Reno T.")
-    st.caption("*currently a little inaccurate, undergoing maintenance to improve functionality")
+    st.caption("Disclaimer: may be slightly inaccurate (approx. 0.02) to support different file types")
     st.markdown("***")
 
     # Import video
@@ -53,12 +53,12 @@ def main():
         start_time = st.slider("Select start (seconds), align blade with start line in preview", 0.0, duration, 0.0, 0.01)
         start_frame = preview_frame(video, start_time)
         if start_frame:
-            st.image(start_frame, caption=f"Start Frame at {start_time:.2f} seconds", use_column_width=True)
+            st.image(start_frame, caption=f"Start frame at {start_time:.2f} seconds", use_column_width=True)
 
         end_time = st.slider("Select finish (seconds)", 0.0, duration, duration, 0.01)
         end_frame = preview_frame(video, end_time)
         if end_frame:
-            st.image(end_frame, caption=f"End Frame at {end_time:.2f} seconds", use_column_width=True)
+            st.image(end_frame, caption=f"End frame at {end_time:.2f} seconds", use_column_width=True)
 
         if st.button("Calculate lap time"):
             if start_time < end_time:
