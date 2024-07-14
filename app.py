@@ -21,13 +21,9 @@ def preview_frame(video, time):
                     continue
             st.error(f"Error extracting frame at {error_time:.2f} seconds: {e}")
             return None
-    
-        st.error(f"Error extracting frame at {error_time:.2f} seconds: {e}")
-        return None
 
         else:
             st.error(f"Error extracting frame at {time:.2f} seconds: {e}")
-            st.caption(f"time = {time} and duration = {length}")
             return None
 
 def main():
