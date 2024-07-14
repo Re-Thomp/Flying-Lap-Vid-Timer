@@ -1,24 +1,17 @@
 # Thank you Chat
 import streamlit as st
+from moviepy.editor import VideoFileClip
 import tempfile
 import os
 from PIL import Image
-import imageio
-import imageio_ffmpeg as ffmpeg
 
-def get_frame(video_reader, point):
+def get_frame(video, time):
     try:
-        frame = video_reader.get_data(point)
+        frame = video.get_frame(time)
         return Image.fromarray(frame)
     except Exception as e:
-        st.error(f"Error extracting frame at {point} frames: {e}")
+        st.error(f"Error extracting frame at {time:.2f} seconds: {e}")
         return None
-
-def frame_time(video_reader, point):
-    return video_reader.get_meta_data()['duration'] * (point / video_reader.count_frames())
-
-def count_frames(video_reader):
-    return video_reader.count_frames()
 
 def main():
     st.title("Flying Lap Video Timer")
@@ -36,24 +29,24 @@ def main():
         temp_file = tempfile.NamedTemporaryFile(delete=False)
         temp_file.write(uploaded_file.read())
         temp_file.close()
-        
+
         # Load video and find stats
         video_path = temp_file.name
-        video_reader = imageio.get_reader(video_path, 'ffmpeg')  # Specify 'ffmpeg' as the backend
-        total_frames = count_frames(video_reader)
+        video = VideoFileClip(video_path)
+        fps = video.fps
+        duration = video.duration
+        total_frames = int(fps * duration)
 
         # Select start and end points with frame preview
-        start_point = st.slider("Select start frame (line up blade tip and start line in preview image)", 0, total_frames - 1, 0, 1)
-        start_frame = get_frame(video_reader, start_point)
-        start_time = frame_time(video_reader, start_point)
+        start_time = st.slider("Select start time (seconds)", 0.0, duration, 0.0, 0.01)
+        start_frame = get_frame(video, start_time)
         if start_frame:
-            st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
+            st.image(start_frame, caption=f"Start Frame at {start_time:.2f} seconds", use_column_width=True)
 
-        end_point = st.slider("Select end frame", 0, total_frames - 1, total_frames - 1, 1)
-        end_frame = get_frame(video_reader, end_point)
-        end_time = frame_time(video_reader, end_point)
+        end_time = st.slider("Select end time (seconds)", 0.0, duration, duration, 0.01)
+        end_frame = get_frame(video, end_time)
         if end_frame:
-            st.image(end_frame, caption=f"End Frame at {end_time:.3f} seconds", use_column_width=True)
+            st.image(end_frame, caption=f"End Frame at {end_time:.2f} seconds", use_column_width=True)
 
         if st.button("Calculate lap time"):
             if start_time < end_time:
@@ -69,6 +62,7 @@ def main():
         st.caption("Restart web page to time another video")
 
         # Clean up
+        video.reader.close()
         os.unlink(temp_file.name)
 
 if __name__ == "__main__":
