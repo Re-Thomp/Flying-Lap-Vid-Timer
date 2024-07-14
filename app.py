@@ -5,14 +5,26 @@ import tempfile
 import os
 from PIL import Image
 
-def preview_frame(video, time, length, fps):
+def preview_frame(video, time):
     try:
         frame = video.get_frame(time)
         return Image.fromarray(frame)
+        error_time = time
     except Exception as e:
         if isinstance(time, float):
-            frame = video.get_frame(2.0)
-            return Image.fromarray(frame)
+            for i in range(10):
+                time -= 0.01
+                try:
+                    frame = video.get_frame(time)
+                    return Image.fromarray(frame)
+                except Exception as e:
+                    continue
+            st.error(f"Error extracting frame at {error_time:.2f} seconds: {e}")
+            return None
+    
+        st.error(f"Error extracting frame at {error_time:.2f} seconds: {e}")
+        return None
+
         else:
             st.error(f"Error extracting frame at {time:.2f} seconds: {e}")
             st.caption(f"time = {time} and duration = {length}")
@@ -43,12 +55,12 @@ def main():
 
         # Select start and end points with frame preview
         start_time = st.slider("Select start (seconds), align blade with start line in preview", 0.0, duration, 0.0, 0.01)
-        start_frame = preview_frame(video, start_time, duration, fps)
+        start_frame = preview_frame(video, start_time)
         if start_frame:
             st.image(start_frame, caption=f"Start Frame at {start_time:.2f} seconds", use_column_width=True)
 
         end_time = st.slider("Select finish (seconds)", 0.0, duration, duration, 0.01)
-        end_frame = preview_frame(video, end_time, duration, fps)
+        end_frame = preview_frame(video, end_time)
         if end_frame:
             st.image(end_frame, caption=f"End Frame at {end_time:.2f} seconds", use_column_width=True)
 
