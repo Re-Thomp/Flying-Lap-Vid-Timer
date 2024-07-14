@@ -35,7 +35,7 @@ def main():
         video = VideoFileClip(video_path)
         fps = video.fps
         duration = video.duration - 1 / fps
-        total_frames = int(fps * duration) - 1
+        total_frames = int(fps * duration)
 
         # Select start and end points with frame preview
         start_time = st.slider("Select start (seconds), align blade with start line in preview", 0.0, duration, 0.0, 0.01)
