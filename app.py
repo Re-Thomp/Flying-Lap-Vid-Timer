@@ -7,7 +7,7 @@ from PIL import Image
 
 def get_frame(video, time, length, fps):
     try:
-        if time >= length:
+        if time == length:
             adjust = length - 0.01
             frame = video.get_frame(adjust)
             return Image.fromarray(frame)
