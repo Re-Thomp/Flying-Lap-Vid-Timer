@@ -11,7 +11,7 @@ def get_frame(video, time, length, fps):
             frame = video.get_frame(time)
             return Image.fromarray(frame)
         else:
-            frame = video.get_frame(length - (2 / fps))
+            frame = video.get_frame(length - (3 / fps))
             return Image.fromarray(frame)
     except Exception as e:
         st.error(f"Error extracting frame at {time:.2f} seconds: {e}")
