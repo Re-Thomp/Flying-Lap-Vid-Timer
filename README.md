@@ -1,2 +1,2 @@
-A streamlit web app designed to time short track speed skating flying laps from video. 
-Link: https://flying-lap-vid-timer.streamlit.app/
+https://flying-lap-vid-timer.streamlit.app/ is a streamlit web app designed to time short track speed skating flying laps from video. 
+Disclaimer: To maximize file compatibility, this app uses time-based increments which are then used to retrieve frames. As a result, there are discrepancies between time and frame. For example, this causes time uncertainties such as: approx. ±0.02s at 60fps and ±0.03s at 30fps for a .mp4 file with h.264 compression.
