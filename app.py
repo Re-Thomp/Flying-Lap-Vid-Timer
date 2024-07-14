@@ -13,6 +13,10 @@ def get_frame(video, time, length, fps):
         else:
             frame = video.get_frame(length - (1 / fps))
             return Image.fromarray(frame)
+    except Exception as e:
+        st.error(f"Error extracting frame at {time:.2f} seconds: {e}")
+        frame = video.get_frame(length - (1 / fps))
+        return Image.fromarray(frame)
 
 def main():
     st.title("Flying Lap Video Timer")
