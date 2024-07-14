@@ -10,7 +10,7 @@ def get_frame(video, time, length, fps):
         if time < length:
             frame = video.get_frame(time)
             return Image.fromarray(frame)
-        else:
+        if time >= length:
             frame = video.get_frame(length - 0.02)
             return Image.fromarray(frame)
     except Exception as e:
