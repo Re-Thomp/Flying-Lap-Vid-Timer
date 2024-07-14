@@ -11,10 +11,13 @@ def preview_frame(video, time, length, fps):
             frame = video.get_frame(time)
             return Image.fromarray(frame)
     except Exception as e:
-        frame = video.get_frame(2)
-        st.error(f"Error extracting frame at {time:.2f} seconds: {e}")
-        st.caption(f"time = {time} and duration = {length}")
-        return None
+        if:
+            frame = video.get_frame(2)
+            return Image.fromarray(frame)
+        else:
+            st.error(f"Error extracting frame at {time:.2f} seconds: {e}")
+            st.caption(f"time = {time} and duration = {length}")
+            return None
 
 def main():
     st.title("Flying Lap Video Timer")
