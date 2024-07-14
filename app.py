@@ -15,6 +15,7 @@ def get_frame(video, time, length, fps):
             return Image.fromarray(frame)
     except Exception as e:
         st.error(f"Error extracting frame at {time:.2f} seconds: {e}")
+        st.caption(f"time = {time} and duration = {length}")
         return None
 
 def main():
