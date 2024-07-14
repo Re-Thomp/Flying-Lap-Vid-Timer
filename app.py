@@ -34,7 +34,7 @@ def main():
         video_path = temp_file.name
         video = VideoFileClip(video_path)
         fps = video.fps
-        duration = video.duration - 1 / fps.float
+        duration = video.duration - 1 / fps
         total_frames = int(fps * duration) - 1
 
         # Select start and end points with frame preview
