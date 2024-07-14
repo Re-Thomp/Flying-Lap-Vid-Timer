@@ -7,11 +7,11 @@ from PIL import Image
 
 def get_frame(video, time, length, fps):
     try:
-        if time < length:
-            frame = video.get_frame(time)
-            return Image.fromarray(frame)
         if time >= length:
             frame = video.get_frame(length - 0.02)
+            return Image.fromarray(frame)
+        if time < length:
+            frame = video.get_frame(time)
             return Image.fromarray(frame)
     except Exception as e:
         st.error(f"Error extracting frame at {time:.2f} seconds: {e}")
@@ -44,12 +44,12 @@ def main():
         start_time = st.slider("Select start (seconds), align blade with start line in preview", 0.0, duration, 0.0, 0.01)
         start_frame = get_frame(video, start_time, duration, fps)
         if start_frame:
-            st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
+            st.image(start_frame, caption=f"Start Frame at {start_time:.2f} seconds", use_column_width=True)
 
         end_time = st.slider("Select finish (seconds)", 0.0, duration, duration, 0.01)
         end_frame = get_frame(video, end_time, duration, fps)
         if end_frame:
-            st.image(end_frame, caption=f"End Frame at {end_time:.3f} seconds", use_column_width=True)
+            st.image(end_frame, caption=f"End Frame at {end_time:.2f} seconds", use_column_width=True)
 
         if st.button("Calculate lap time"):
             if start_time < end_time:
