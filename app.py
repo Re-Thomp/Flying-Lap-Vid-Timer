@@ -34,19 +34,18 @@ def main():
         video_path = temp_file.name
         video = VideoFileClip(video_path)
         fps = video.fps
-        duration = video.duration - 1 / fps
-        total_frames = int(fps * duration)
+        duration = video.duration
 
         # Select start and end points with frame preview
         start_time = st.slider("Select start (seconds), align blade with start line in preview", 0.0, duration, 0.0, 0.01)
         start_frame = get_frame(video, start_time)
         if start_frame:
-            st.image(start_frame, caption=f"Start Frame at {start_time:.2f} seconds", use_column_width=True)
+            st.image(start_frame, caption=f"Start Frame at {start_time:.3f} seconds", use_column_width=True)
 
         end_time = st.slider("Select finish (seconds)", 0.0, duration, duration, 0.01)
         end_frame = get_frame(video, end_time)
         if end_frame:
-            st.image(end_frame, caption=f"End Frame at {end_time:.2f} seconds", use_column_width=True)
+            st.image(end_frame, caption=f"End Frame at {end_time:.3f} seconds", use_column_width=True)
 
         if st.button("Calculate lap time"):
             if start_time < end_time:
