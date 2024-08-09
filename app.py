@@ -57,9 +57,9 @@ def main():
             st.session_state.end_time = duration
 
         # Select start and end points with frame preview
-        if st.button("Prev."):
+        if st.button("Prev.", 1):
             st.session_state.start_time = max(0, st.session_state.start_time - increment)
-        if st.button("Next"):
+        if st.button("Next", 1):
             st.session_state.start_time = min(duration, st.session_state.start_time + increment)
         start_time = st.slider("Select start (seconds): align blade with start line in preview", 0.0, duration, st.session_state.start_time, 0.01)
         st.session_state.start_time = start_time
@@ -67,9 +67,9 @@ def main():
         if start_frame:
             st.image(start_frame, caption=f"Start frame at {st.session_state.start_time:.2f} seconds", use_column_width=True)
 
-        if st.button("Prev."):
+        if st.button("Prev.", 2):
             st.session_state.end_time = max(0, st.session_state.end_time - increment)
-        if st.button("Next"):
+        if st.button("Next", 2):
             st.session_state.end_time = min(duration, st.session_state.end_time + increment)
         end_time = st.slider("Select finish (seconds)", 0.0, duration, st.session_state.end_time, 0.01)
         end_frame = preview_frame(video, end_time)
