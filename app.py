@@ -60,7 +60,7 @@ def main():
         if st.button("Prev.", 1) and st.session_state.start_time != 0:
             st.session_state.start_time = st.session_state.start_time - increment
         if st.button("Next", 2) and st.session_state.start_time != duration:
-            st.session_state.start_time = st.session_state.start_time + increment)
+            st.session_state.start_time = st.session_state.start_time + increment
         start_time = st.slider("Select start (seconds): align blade with start line in preview", 0.0, duration, st.session_state.start_time, 0.01)
         st.session_state.start_time = start_time
         start_frame = preview_frame(video, start_time)
