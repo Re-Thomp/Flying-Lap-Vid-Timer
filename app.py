@@ -44,52 +44,32 @@ def main():
         temp_file.write(uploaded_file.read())
         temp_file.close()
 
-        # Load video, find stats, and set increments
+        # Load video and find stats
         video_path = temp_file.name
         video = VideoFileClip(video_path)
         fps = video.fps
         duration = video.duration
-        increment = 0.01
 
-        if 'start_time' not in st.session_state:
-            st.session_state.start_time = 0.0
-        if 'end_time' not in st.session_state:
-            st.session_state.end_time = duration
-            
         # Select start and end points with frame preview
-        st.text("Select start (seconds): align blade with start line in preview")
-        left_column, right_column = st.columns(2)
-        if left_column.button("Prev. 0.1", 1) and st.session_state.start_time != 0.00:
-            st.session_state.start_time = st.session_state.start_time - increment
-        if right_column.button("Next 0.1", 2) and st.session_state.start_time != duration:
-            st.session_state.start_time = st.session_state.start_time + increment
-        start_time = st.slider(" ", 0.0, duration, st.session_state.start_time, 0.01)
-        st.session_state.start_time = start_time
+        start_time = st.slider("Select start (seconds): align blade with start line in preview", 0.0, duration, 0.0, 0.01)
         start_frame = preview_frame(video, start_time)
         if start_frame:
-            st.image(start_frame, caption=f"Start frame at {st.session_state.start_time:.2f} seconds", use_column_width=True)
+            st.image(start_frame, caption=f"Start frame at {start_time:.2f} seconds", use_column_width=True)
 
-        st.text("Select finish (seconds)")
-        left_column1, right_column1 = st.columns(2)
-        if left_column1.button("Prev. 0.1", 3) and st.session_state.end_time != 0.00:
-            st.session_state.end_time = st.session_state.end_time - increment
-        if right_column1.button("Next 0.1", 4) and st.session_state.end_time != duration:
-            st.session_state.end_time = st.session_state.end_time + increment
-        end_time = st.slider("  ", 0.0, duration, st.session_state.end_time, 0.01)
-        st.session_state.end_time = end_time
+        end_time = st.slider("Select finish (seconds)", 0.0, duration, duration, 0.01)
         end_frame = preview_frame(video, end_time)
         if end_frame:
-            st.image(end_frame, caption=f"End frame at {st.session_state.end_time:.2f} seconds", use_column_width=True)
+            st.image(end_frame, caption=f"End frame at {end_time:.2f} seconds", use_column_width=True)
 
         if st.button("Calculate lap time"):
-            # Results
-            if st.session_state.start_time < st.session_state.end_time:
-                time_elapsed = st.session_state.end_time - st.session_state.start_time
+        # Results
+            if start_time < end_time:
+                time_elapsed = end_time - start_time
                 st.success(f"Your lap time is {time_elapsed:.2f} seconds!")
-            elif st.session_state.start_time == st.session_state.end_time:
+            elif start_time == end_time:
                 st.success(f"Zero seconds?")
             else:
-                time_elapsed = st.session_state.start_time - st.session_state.end_time
+                time_elapsed = start_time - end_time
                 st.success(f"Your lap time is -{time_elapsed:.2f} seconds?")
 
         st.caption("Refresh web page to time another video")
@@ -104,3 +84,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    
