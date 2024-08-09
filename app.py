@@ -54,7 +54,9 @@ def main():
         if 'end_time' not in st.session_state:
             st.session_state.end_time = duration
 
-        # Frame control buttons
+        # Define increment
+        increment = 0.1
+
         col1, col2 = st.columns(2)
 
         with col1:
@@ -62,14 +64,28 @@ def main():
                 st.session_state.start_time = max(0, st.session_state.start_time - 1 / fps)
                 st.session_state.end_time = max(0, st.session_state.end_time - 1 / fps)
 
+            if st.button("Previous 0.1s"):
+                st.session_state.start_time = max(0, st.session_state.start_time - increment)
+                st.session_state.end_time = max(0, st.session_state.end_time - increment)
+
         with col2:
             if st.button("Next Frame"):
                 st.session_state.start_time = min(duration, st.session_state.start_time + 1 / fps)
                 st.session_state.end_time = min(duration, st.session_state.end_time + 1 / fps)
 
+            if st.button("Next 0.1s"):
+                st.session_state.start_time = min(duration, st.session_state.start_time + increment)
+                st.session_state.end_time = min(duration, st.session_state.end_time + increment)
+
         # Sliders to select start and end times
-        start_time = st.slider("Select start (seconds)", 0.0, duration, st.session_state.start_time, 0.01)
-        end_time = st.slider("Select finish (seconds)", 0.0, duration, st.session_state.end_time, 0.01)
+        start_time = st.slider(
+            "Select start (seconds): align blade with start line in preview", 
+            0.0, duration, st.session_state.start_time, 0.01
+        )
+        end_time = st.slider(
+            "Select finish (seconds)", 
+            0.0, duration, st.session_state.end_time, 0.01
+        )
 
         # Update session state based on slider changes
         st.session_state.start_time = start_time
