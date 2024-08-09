@@ -57,23 +57,25 @@ def main():
             st.session_state.end_time = duration
             
         # Select start and end points with frame preview
+        st.text("Select start (seconds): align blade with start line in preview")
         left_column, right_column = st.columns(2)
-        if left_column.button("Prev. 0.1", 1) and st.session_state.start_time != 0:
+        if left_column.button("Prev. 0.1", 1) and st.session_state.start_time != 0.00:
             st.session_state.start_time = st.session_state.start_time - increment
         if right_column.button("Next 0.1", 2) and st.session_state.start_time != duration:
             st.session_state.start_time = st.session_state.start_time + increment
-        start_time = st.slider("Select start (seconds): align blade with start line in preview", 0.0, duration, st.session_state.start_time, 0.01)
+        start_time = st.slider(" ", 0.0, duration, st.session_state.start_time, 0.01)
         st.session_state.start_time = start_time
         start_frame = preview_frame(video, start_time)
         if start_frame:
             st.image(start_frame, caption=f"Start frame at {st.session_state.start_time:.2f} seconds", use_column_width=True)
 
+        st.text("Select finish (seconds)")
         left_column1, right_column1 = st.columns(2)
-        if left_column1.button("Prev. 0.1", 3) and st.session_state.end_time != 0:
+        if left_column1.button("Prev. 0.1", 3) and st.session_state.end_time != 0.00:
             st.session_state.end_time = st.session_state.end_time - increment
         if right_column1.button("Next 0.1", 4) and st.session_state.end_time != duration:
             st.session_state.end_time = st.session_state.end_time + increment
-        end_time = st.slider("Select finish (seconds)", 0.0, duration, st.session_state.end_time, 0.01)
+        end_time = st.slider("  ", 0.0, duration, st.session_state.end_time, 0.01)
         st.session_state.end_time = end_time
         end_frame = preview_frame(video, end_time)
         if end_frame:
