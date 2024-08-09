@@ -21,7 +21,6 @@ def preview_frame(video, time):
                     continue
             st.error(f"Error extracting frame at {error_time:.2f} seconds: {e}")
             return None
-
         else:
             st.error(f"Error extracting frame at {time:.2f} seconds: {e}")
             return None
@@ -49,30 +48,32 @@ def main():
         fps = video.fps
         duration = video.duration
 
-        # Initialize start_time and end_time
+        # Initialize session state for start_time and end_time if not already set
         if 'start_time' not in st.session_state:
             st.session_state.start_time = 0.0
         if 'end_time' not in st.session_state:
             st.session_state.end_time = duration
 
+        # Frame control buttons
         col1, col2 = st.columns(2)
 
         with col1:
-            st.write("Start Time")
-            st.slider("Select start (seconds)", 0.0, duration, st.session_state.start_time, 0.01, key="start_time")
+            if st.button("Previous Frame"):
+                st.session_state.start_time = max(0, st.session_state.start_time - 1 / fps)
+                st.session_state.end_time = max(0, st.session_state.end_time - 1 / fps)
 
         with col2:
-            st.write("End Time")
-            st.slider("Select finish (seconds)", 0.0, duration, st.session_state.end_time, 0.01, key="end_time")
+            if st.button("Next Frame"):
+                st.session_state.start_time = min(duration, st.session_state.start_time + 1 / fps)
+                st.session_state.end_time = min(duration, st.session_state.end_time + 1 / fps)
 
-        # Buttons to move frame
-        if st.button("Previous Frame"):
-            st.session_state.start_time = max(0, st.session_state.start_time - 1 / fps)
-            st.session_state.end_time = max(0, st.session_state.end_time - 1 / fps)
+        # Sliders to select start and end times
+        start_time = st.slider("Select start (seconds)", 0.0, duration, st.session_state.start_time, 0.01)
+        end_time = st.slider("Select finish (seconds)", 0.0, duration, st.session_state.end_time, 0.01)
 
-        if st.button("Next Frame"):
-            st.session_state.start_time = min(duration, st.session_state.start_time + 1 / fps)
-            st.session_state.end_time = min(duration, st.session_state.end_time + 1 / fps)
+        # Update session state based on slider changes
+        st.session_state.start_time = start_time
+        st.session_state.end_time = end_time
 
         # Update frame previews
         start_frame = preview_frame(video, st.session_state.start_time)
