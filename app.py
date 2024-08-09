@@ -6,7 +6,6 @@ import os
 from PIL import Image
 
 def preview_frame(video, time):
-# Gets a preview frame given time, compensates for moviepy last frame error
     error_time = time
     try:
         frame = video.get_frame(time)
@@ -50,26 +49,49 @@ def main():
         fps = video.fps
         duration = video.duration
 
-        # Select start and end points with frame preview
-        start_time = st.slider("Select start (seconds): align blade with start line in preview", 0.0, duration, 0.0, 0.01)
-        start_frame = preview_frame(video, start_time)
-        if start_frame:
-            st.image(start_frame, caption=f"Start frame at {start_time:.2f} seconds", use_column_width=True)
+        # Initialize start_time and end_time
+        if 'start_time' not in st.session_state:
+            st.session_state.start_time = 0.0
+        if 'end_time' not in st.session_state:
+            st.session_state.end_time = duration
 
-        end_time = st.slider("Select finish (seconds)", 0.0, duration, duration, 0.01)
-        end_frame = preview_frame(video, end_time)
+        col1, col2 = st.columns(2)
+
+        with col1:
+            st.write("Start Time")
+            st.slider("Select start (seconds)", 0.0, duration, st.session_state.start_time, 0.01, key="start_time")
+
+        with col2:
+            st.write("End Time")
+            st.slider("Select finish (seconds)", 0.0, duration, st.session_state.end_time, 0.01, key="end_time")
+
+        # Buttons to move frame
+        if st.button("Previous Frame"):
+            st.session_state.start_time = max(0, st.session_state.start_time - 1 / fps)
+            st.session_state.end_time = max(0, st.session_state.end_time - 1 / fps)
+
+        if st.button("Next Frame"):
+            st.session_state.start_time = min(duration, st.session_state.start_time + 1 / fps)
+            st.session_state.end_time = min(duration, st.session_state.end_time + 1 / fps)
+
+        # Update frame previews
+        start_frame = preview_frame(video, st.session_state.start_time)
+        if start_frame:
+            st.image(start_frame, caption=f"Start frame at {st.session_state.start_time:.2f} seconds", use_column_width=True)
+
+        end_frame = preview_frame(video, st.session_state.end_time)
         if end_frame:
-            st.image(end_frame, caption=f"End frame at {end_time:.2f} seconds", use_column_width=True)
+            st.image(end_frame, caption=f"End frame at {st.session_state.end_time:.2f} seconds", use_column_width=True)
 
         if st.button("Calculate lap time"):
-        # Results
-            if start_time < end_time:
-                time_elapsed = end_time - start_time
+            # Results
+            if st.session_state.start_time < st.session_state.end_time:
+                time_elapsed = st.session_state.end_time - st.session_state.start_time
                 st.success(f"Your lap time is {time_elapsed:.2f} seconds!")
-            elif start_time == end_time:
+            elif st.session_state.start_time == st.session_state.end_time:
                 st.success(f"Zero seconds?")
             else:
-                time_elapsed = start_time - end_time
+                time_elapsed = st.session_state.start_time - st.session_state.end_time
                 st.success(f"Your lap time is -{time_elapsed:.2f} seconds?")
 
         st.caption("Refresh web page to time another video")
