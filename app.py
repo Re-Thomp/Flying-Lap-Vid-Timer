@@ -6,6 +6,7 @@ import os
 from PIL import Image
 
 def preview_frame(video, time):
+# Gets a preview frame given time, compensates for moviepy last frame error
     error_time = time
     try:
         frame = video.get_frame(time)
@@ -21,6 +22,7 @@ def preview_frame(video, time):
                     continue
             st.error(f"Error extracting frame at {error_time:.2f} seconds: {e}")
             return None
+
         else:
             st.error(f"Error extracting frame at {time:.2f} seconds: {e}")
             return None
@@ -47,56 +49,30 @@ def main():
         video = VideoFileClip(video_path)
         fps = video.fps
         duration = video.duration
+        increment = 0.01
 
-        # Initialize session state for start_time and end_time if not already set
         if 'start_time' not in st.session_state:
             st.session_state.start_time = 0.0
         if 'end_time' not in st.session_state:
             st.session_state.end_time = duration
 
-        # Define increment
-        increment = 0.1
-
-        col1, col2 = st.columns(2)
-
-        with col1:
-            if st.button("Previous Frame"):
-                st.session_state.start_time = max(0, st.session_state.start_time - 1 / fps)
-                st.session_state.end_time = max(0, st.session_state.end_time - 1 / fps)
-
-            if st.button("Previous 0.1s"):
-                st.session_state.start_time = max(0, st.session_state.start_time - increment)
-                st.session_state.end_time = max(0, st.session_state.end_time - increment)
-
-        with col2:
-            if st.button("Next Frame"):
-                st.session_state.start_time = min(duration, st.session_state.start_time + 1 / fps)
-                st.session_state.end_time = min(duration, st.session_state.end_time + 1 / fps)
-
-            if st.button("Next 0.1s"):
-                st.session_state.start_time = min(duration, st.session_state.start_time + increment)
-                st.session_state.end_time = min(duration, st.session_state.end_time + increment)
-
-        # Sliders to select start and end times
-        start_time = st.slider(
-            "Select start (seconds): align blade with start line in preview", 
-            0.0, duration, st.session_state.start_time, 0.01
-        )
-        end_time = st.slider(
-            "Select finish (seconds)", 
-            0.0, duration, st.session_state.end_time, 0.01
-        )
-
-        # Update session state based on slider changes
+        # Select start and end points with frame preview
+        if st.button("Prev."):
+            st.session_state.start_time = max(0, st.session_state.start_time - increment)
+        if st.button("Next"):
+            st.session_state.start_time = min(duration, st.session_state.start_time + increment)
+        start_time = st.slider("Select start (seconds): align blade with start line in preview", 0.0, duration, st.session_state.start_time, 0.01)
         st.session_state.start_time = start_time
-        st.session_state.end_time = end_time
-
-        # Update frame previews
-        start_frame = preview_frame(video, st.session_state.start_time)
+        start_frame = preview_frame(video, start_time)
         if start_frame:
             st.image(start_frame, caption=f"Start frame at {st.session_state.start_time:.2f} seconds", use_column_width=True)
 
-        end_frame = preview_frame(video, st.session_state.end_time)
+        if st.button("Prev."):
+            st.session_state.end_time = max(0, st.session_state.end_time - increment)
+        if st.button("Next"):
+            st.session_state.end_time = min(duration, st.session_state.end_time + increment)
+        end_time = st.slider("Select finish (seconds)", 0.0, duration, st.session_state.end_time, 0.01)
+        end_frame = preview_frame(video, end_time)
         if end_frame:
             st.image(end_frame, caption=f"End frame at {st.session_state.end_time:.2f} seconds", use_column_width=True)
 
