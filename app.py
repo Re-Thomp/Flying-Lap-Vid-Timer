@@ -44,17 +44,14 @@ def main():
         temp_file.write(uploaded_file.read())
         temp_file.close()
 
-        # Load video and find stats
+        # Load video, find stats, and set increments
         video_path = temp_file.name
         video = VideoFileClip(video_path)
         fps = video.fps
         duration = video.duration
         increment = 0.01
-
-        if 'start_time' not in st.session_state:
-            st.session_state.start_time = 0.0
-        if 'end_time' not in st.session_state:
-            st.session_state.end_time = duration
+        st.session_state.start_time = 0.0
+        st.session_state.end_time = duration
 
         # Select start and end points with frame preview
         start_time = st.slider("Select start (seconds): align blade with start line in preview", 0.0, duration, st.session_state.start_time, 0.01)
