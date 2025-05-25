@@ -1,6 +1,6 @@
 # Thank you Chat for the help
 import streamlit as st
-from moviepy.video.io import VideoFileClip
+from moviepy.video import VideoFileClip
 import tempfile
 import os
 from PIL import Image
